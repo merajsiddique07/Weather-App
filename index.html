@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Weather</title>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/4ee361ff45.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="card">
+      <div class="nav">
+        <div class="logo"><img src="images/logo.png" /></div>
+        <div class="icon"><i class="fa-solid fa-cloud"></i></div>
+      </div>
+      <div class="search">
+        <input list="cities"
+          type="text"
+          placeholder="enter city name"
+          spellcheck="false"
+        />
+      <datalist id="cities">
+        <option value="Ahmedabad">
+        <option value="Amsterdam">
+        <option value="Atlanta">
+        <option value="Ballia"></option>
+        <option value="Bangalore">
+        <option value="Barcelona">
+        <option value="Bengaluru">
+        <option value="Berlin">
+        <option value="Boston">
+        <option value="Brisbane">
+        <option value="Calgary">
+        <option value="Chennai">
+        <option value="Chicago">
+        <option value="Delhi">
+        <option value="Dubai">
+        <option value="Edinburgh">
+        <option value="Frankfurt">
+        <option value="Ghaziabad">
+        <option value="Gurgaon">
+        <option value="Hanoi">
+        <option value="Helsinki">
+        <option value="Hyderabad">
+        <option value="Istanbul">
+        <option value="Jaipur">
+        <option value="Kolkata">
+        <option value="Lisbon">
+        <option value="London">
+        <option value="Los Angeles">
+        <option value="Lucknow">
+        <option value="Madrid">
+        <option value="Melbourne">
+        <option value="Miami">
+        <option value="Mumbai">
+        <option value="Nagpur">
+        <option value="Nashik">
+        <option value="New Delhi">
+        <option value="New York">
+        <option value="Oslo">
+        <option value="Paris">
+        <option value="Peshawar">
+        <option value="Pune">
+        <option value="Rajkot">
+        <option value="Rio de Janeiro">
+        <option value="Rome">
+        <option value="San Francisco">
+        <option value="Santiago">
+        <option value="São Paulo">
+        <option value="Seattle">
+        <option value="Shanghai">
+        <option value="Singapore">
+        <option value="Surat">
+        <option value="Sydney">
+        <option value="Tampa">
+        <option value="Tehran">
+        <option value="Tokyo">
+        <option value="Toronto">
+        <option value="Vancouver">
+        <option value="Vienna">
+        <option value="Warsaw">
+        <option value="Washington, D.C.">
+        <option value="Zagreb">
+        <option value="Zurich">
+        <option value="Ahmedabad">
+        <option value="Alexandria">
+        <option value="Belfast">
+        <option value="Bordeaux">
+        <option value="Brussels">
+        <option value="Cairo">
+        <option value="Cape Town">
+        <option value="Copenhagen">
+        <option value="Dakar">
+        <option value="Doha">
+        <option value="Durban">
+        <option value="Helsinki">
+        <option value="Kuala Lumpur">
+        <option value="Lima">
+        <option value="Moscow">
+        <option value="Nairobi">
+        <option value="Oslo">
+        <option value="Rabat">
+        <option value="Stockholm">
+        <option value="Tunis">
+        <option value="Wellington">
+    </datalist>
+        <button><img src="images/search.png" /></button>
+      </div>
+
+      <div class="error">Invalid city name...</div>
+      <div class="weather">
+        <img src="images/rain.png" class="weather-icon" />
+        <h1 class="temp">25°C</h1>
+        <h2 class="city">Lucknow</h2>
+        <div class="details">
+          <div class="col">
+            <img src="images/humidity.png" />
+            <div>
+              <p class="humidity">50%</p>
+              <p>Humidity</p>
+            </div>
+          </div>
+          <div class="col">
+            <img src="images/wind.png" />
+            <div>
+              <p class="wind">15 km/h</p>
+              <p>Wind Speed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const apiKey = "25409937de7a9fd8d7ed81fd3b205783";
+      const apiUrlc = "https://api.openweathermap.org/data/2.5/weather?";
+
+      const apiUrl =
+        "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+      const searchBox = document.querySelector(".search input");
+      const searchBtn = document.querySelector(".search button");
+
+      const weatherIcon = document.querySelector(".weather-icon");
+
+      async function checkWeather1() {
+        const respose = await fetch(
+          apiUrlc +
+            `lat=26.848596518438764&lon=80.9225780348888&appid=${apiKey}&units=metric`
+        );
+
+        var data = await respose.json();
+
+        document.querySelector(".temp").innerHTML =
+          Math.round(data.main.temp) + "°C";
+        document.querySelector(".humidity").innerHTML =
+          data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+      }
+      checkWeather1();
+
+      async function checkWeather(city) {
+        const respose = await fetch(apiUrl + city + `&appid=${apiKey}`);
+
+        if (respose.status == 404) {
+          document.querySelector(".error").style.display = "block";
+        } else if (city != "") {
+          var data = await respose.json();
+
+          document.querySelector(".city").innerHTML = data.name;
+          document.querySelector(".temp").innerHTML =
+            Math.round(data.main.temp) + "°C";
+          document.querySelector(".humidity").innerHTML =
+            data.main.humidity + "%";
+          document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+
+          if (data.weather[0].main == "Clouds") {
+            weatherIcon.src = "images/clouds.png";
+          } else if (data.weather[0].main == "Clear") {
+            weatherIcon.src = "images/clear.png";
+          } else if (data.weather[0].main == "Rain") {
+            weatherIcon.src = "images/rain.png";
+          } else if (data.weather[0].main == "Drizzle") {
+            weatherIcon.src = "images/drizzle.png";
+          } else if (data.weather[0].main == "Mist") {
+            weatherIcon.src = "images/mist.png";
+          }
+
+          document.querySelector(".error").style.display = "none";
+        }
+      }
+
+      searchBox.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+          checkWeather(searchBox.value);
+        }
+      });
+      
+      searchBtn.addEventListener("click", () => {
+        checkWeather(searchBox.value);
+      });
+    </script>
+  </body>
+</html>
